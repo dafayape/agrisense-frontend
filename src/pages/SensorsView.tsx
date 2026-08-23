@@ -250,7 +250,7 @@ export default function SensorsView({ readings: propReadings = [], nodes = [] }:
       return {
         "Waktu Telemetry": formatDateTime(r.timestamp),
         "ID Perangkat": r.device_db_id,
-        "Kode RH Perangkat": r.device_code,
+        "Kode Perangkat": r.device_code,
         "Nama Node": nodeNameLookup[r.device_id] || r.device_id,
         "Latitude": r.latitude,
         "Longitude": r.longitude,
@@ -315,7 +315,7 @@ export default function SensorsView({ readings: propReadings = [], nodes = [] }:
           <div className="relative w-full">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder={t("Cari Kode RH / Node...")}
+              placeholder={t("Cari Kode / Node...")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 h-10 text-xs font-semibold bg-background/80 border-border/60 rounded-xl focus:ring-2 focus:ring-emerald-500/50 w-full"
