@@ -249,7 +249,7 @@ export default function SensorsView({ readings: propReadings = [], nodes = [] }:
       const r = normalizeReading(raw);
       return {
         "Waktu Telemetry": formatDateTime(r.timestamp),
-        "ID Perangkat": r.device_db_id,
+        "ID Telemetry": r.device_db_id,
         "Kode Perangkat": r.device_code,
         "Nama Node": nodeNameLookup[r.device_id] || r.device_id,
         "Latitude": r.latitude,
@@ -505,8 +505,8 @@ export default function SensorsView({ readings: propReadings = [], nodes = [] }:
                 <TableHeader className="bg-muted/50">
                   <TableRow className="hover:bg-transparent border-b border-border">
                     <TableHead className="py-3 pl-6 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Waktu Telemetry')}</TableHead>
-                    <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('ID Perangkat')}</TableHead>
-                    <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Kode / Nomor Seri (RH)')}</TableHead>
+                    <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('ID Telemetry')}</TableHead>
+                    <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Kode / Nomor Seri')}</TableHead>
                     <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Nama Perangkat')}</TableHead>
                     <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Kecepatan Angin')}</TableHead>
                     <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Arah Angin (BMKG)')}</TableHead>
