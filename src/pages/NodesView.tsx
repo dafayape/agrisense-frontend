@@ -254,7 +254,7 @@ export default function NodesView({ nodes: propNodes, userRole }: { nodes?: IoTN
     e.preventDefault();
     const serialCode = formData.id.trim();
     if (!serialCode) {
-      toast.error('Gagal: Kode / Nomor Seri Perangkat wajib diisi!');
+      toast.error('Gagal: Kode Perangkat wajib diisi!');
       return;
     }
 
@@ -597,11 +597,11 @@ export default function NodesView({ nodes: propNodes, userRole }: { nodes?: IoTN
 
                       <div className="grid gap-2">
                         <Label className="text-xs font-extrabold uppercase tracking-wider text-muted-foreground block">
-                          {t('Kode / Nomor Seri (RH)')} <span className="text-rose-500">*</span>
+                          {t('Kode Perangkat')} <span className="text-rose-500">*</span>
                         </Label>
                         <div className="flex gap-2">
                           <Input
-                            placeholder="RH-001"
+                            placeholder="AGRISENSE-CC-00X"
                             value={formData.id}
                             className="w-full rounded-2xl h-11 px-4 border-border/80 bg-muted/20 font-semibold text-xs focus:bg-background focus:ring-2 focus:ring-emerald-500/30 focus:border-emerald-600 transition-all shadow-xs flex-1"
                             onChange={e => setFormData({ ...formData, id: e.target.value })}
@@ -708,7 +708,7 @@ export default function NodesView({ nodes: propNodes, userRole }: { nodes?: IoTN
                                   try {
                                     const scanner = new Html5Qrcode('qr-reader-node');
                                     const result = await scanner.scanFile(file, true);
-                                    
+
                                     let scannedId = result;
                                     let scannedFw = '';
                                     try {
@@ -769,7 +769,7 @@ export default function NodesView({ nodes: propNodes, userRole }: { nodes?: IoTN
                             return (
                               <Badge className={cn(
                                 "text-xs font-extrabold px-3 py-1 rounded-full border flex items-center gap-1.5 shadow-xs",
-                                isOnline 
+                                isOnline
                                   ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border-emerald-500/40"
                                   : isWarning
                                   ? "bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40"

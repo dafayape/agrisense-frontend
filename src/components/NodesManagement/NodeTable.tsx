@@ -22,8 +22,7 @@ const NodeTable = React.memo(({ nodes, onEdit, onDelete, userRole }: NodeTablePr
       <Table>
         <TableHeader className="bg-muted/50">
           <TableRow className="hover:bg-transparent border-b border-border">
-            <TableHead className="py-3 pl-6 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('ID Perangkat')}</TableHead>
-            <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Kode / Nomor Seri (RH)')}</TableHead>
+            <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Kode Perangkat')}</TableHead>
             <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Nama Perangkat')}</TableHead>
             <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Lokasi')}</TableHead>
             <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Latitude')}</TableHead>
@@ -81,7 +80,7 @@ const NodeTable = React.memo(({ nodes, onEdit, onDelete, userRole }: NodeTablePr
                               {t('Aktif')}
                             </Badge>
                             {hasWarning && (
-                              <Badge 
+                              <Badge
                                 className="text-xs font-extrabold px-2.5 py-0.5 rounded-full border bg-amber-500/15 text-amber-700 dark:text-amber-300 border-amber-500/40 flex items-center w-fit gap-1 cursor-help"
                                 title={(node as any).warning_reasons?.join(', ') || t('Anomali Telemetri')}
                               >
