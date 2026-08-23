@@ -40,8 +40,8 @@ export default function SensorsView({ readings: propReadings = [], nodes = [] }:
       } catch (e) {}
     };
 
-    const propList = Array.isArray((propReadings as any)?.data) 
-      ? (propReadings as any).data 
+    const propList = Array.isArray((propReadings as any)?.data)
+      ? (propReadings as any).data
       : (Array.isArray(propReadings) ? propReadings : []);
 
     if (propList.length > 0) {
@@ -506,7 +506,7 @@ export default function SensorsView({ readings: propReadings = [], nodes = [] }:
                   <TableRow className="hover:bg-transparent border-b border-border">
                     <TableHead className="py-3 pl-6 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Waktu Telemetry')}</TableHead>
                     <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('ID Telemetry')}</TableHead>
-                    <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Kode / Nomor Seri')}</TableHead>
+                    <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Kode Perangkat')}</TableHead>
                     <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Nama Perangkat')}</TableHead>
                     <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Kecepatan Angin')}</TableHead>
                     <TableHead className="py-3 font-bold text-xs uppercase tracking-wider text-muted-foreground">{t('Arah Angin (BMKG)')}</TableHead>
