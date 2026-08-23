@@ -448,17 +448,16 @@ export default function ReportsView() {
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('ID Perangkat')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Kode Perangkat')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Nama Perangkat')}</TableHead>
+                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Kecepatan Angin (km/h)')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Latitude</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Longitude</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Elevasi (MDPL)')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Baterai & Tegangan')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">CO2 (PPM)</TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Carbon Flux (NEE)</TableHead>
+                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">CH4 (PPM)</TableHead>
+                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">N₂O (PPB)</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Suhu Udara (°C)')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Kelembapan Udara (%)')}</TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Suhu Tanah (°C)')}</TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Kelembapan Tanah (%)')}</TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('pH Tanah')}</TableHead>
                       </>
                     ) : reportType === 'maintenance' ? (
                       <>
@@ -492,12 +491,10 @@ export default function ReportsView() {
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Periode Awal')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Periode Akhir')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Rata-rata CO2 (PPM)</TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Rata-rata Carbon Flux (NEE)</TableHead>
+                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Rata-rata CH4 (PPM)</TableHead>
+                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Rata-rata N₂O (PPB)</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Suhu Udara (°C)')}</TableHead>
                         <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Kelembapan Udara (%)')}</TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Suhu Tanah (°C)')}</TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('Kelembapan Tanah (%)')}</TableHead>
-                        <TableHead className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">{t('pH Tanah')}</TableHead>
                       </>
                     )
                   )}
