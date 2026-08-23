@@ -44,7 +44,6 @@ const NodeTable = React.memo(({ nodes, onEdit, onDelete, userRole }: NodeTablePr
 
               return (
                 <TableRow key={node.id} className="hover:bg-muted/20 transition-colors border-b border-border/50">
-                  <TableCell className="text-sm font-extrabold py-3 pl-6 text-foreground whitespace-nowrap">{rawCode}</TableCell>
                   <TableCell className="py-3 whitespace-nowrap">
                     <Badge variant="outline" className="bg-primary/10 text-primary border-primary/20 font-black text-xs px-2.5 py-0.5 rounded-full">
                       {rawCode}
