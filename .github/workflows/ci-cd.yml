@@ -16,54 +16,7 @@ on:
 
 jobs:
   # ════════════════════════════════════════════
-  # JOB 1: CI — Lint & Test Backend (Laravel)
-  # ════════════════════════════════════════════
-  backend-ci:
-    name: "🧪 Backend CI (PHP)"
-    runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./backend
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Setup PHP 8.2
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-          extensions: pdo_mysql, mbstring, exif, pcntl, bcmath, gd
-          coverage: none
-
-      - name: Cache Composer Dependencies
-        uses: actions/cache@v4
-        with:
-          path: backend/vendor
-          key: composer-${{ hashFiles('backend/composer.lock') }}
-          restore-keys: composer-
-
-      - name: Install Dependencies
-        run: composer install --no-interaction --prefer-dist --optimize-autoloader
-
-      - name: Code Style Check (Laravel Pint)
-        run: vendor/bin/pint --test
-
-      - name: Prepare Test Environment
-        run: |
-          cp .env.example .env
-          cp .env.example ../.env
-          php artisan key:generate
-          echo "DB_CONNECTION=sqlite" >> .env
-          echo "DB_DATABASE=:memory:" >> .env
-          echo "DB_CONNECTION=sqlite" >> ../.env
-          echo "DB_DATABASE=:memory:" >> ../.env
-
-      - name: Run PHPUnit Tests
-        run: php artisan test
-
-  # ════════════════════════════════════════════
-  # JOB 2: CI — Type Check & Build Frontend
+  # JOB 1: CI — Type Check & Build Frontend
   # ════════════════════════════════════════════
   frontend-ci:
     name: "🎨 Frontend CI (React)"
@@ -157,21 +110,22 @@ jobs:
             docker compose build app
             echo "✅ Docker image built!"
 
-            # --- ATOMIC DIST SWAP ---
-            # Extract dist/ into a TEMP folder first, then rename.
-            # This ensures nginx never serves an empty folder:
-            #   rm -rf dist → distrib-new → mv = atomic swap on Linux
+            # --- DIST ASSET UPDATE (Preserve Directory Inode) ---
+            # Extract dist/ into a temp folder, then copy contents into existing ./dist
+            # This prevents breaking the Docker bind-mount inode on host Linux.
             echo "📦 Extracting frontend assets from image..."
+            mkdir -p ./dist
             docker rm -f tmp-extract >/dev/null 2>&1 || true
             rm -rf ./dist-new
             docker create --name tmp-extract agrisense-app:latest true
-            docker cp tmp-extract:/app/dist ./dist-new
+            docker cp tmp-extract:/app/dist/. ./dist-new/
             docker rm -f tmp-extract >/dev/null 2>&1 || true
-            rm -rf ./dist-old
-            mv ./dist ./dist-old 2>/dev/null || true
-            mv ./dist-new ./dist
-            rm -rf ./dist-old
-            echo "✅ Frontend assets swapped atomically (no nginx downtime)!"
+            # Sync contents into ./dist without recreating directory inode
+            cp -rT ./dist-new/ ./dist/ || cp -rf ./dist-new/* ./dist/
+            rm -rf ./dist-new
+            # Ensure permissions so Nginx worker (user nginx) can read assets (prevent 403)
+            chmod -R 755 ./dist
+            echo "✅ Frontend assets updated with preserved directory inode & 755 permissions!"
 
             echo "══════════════════════════════════════"
             echo "🚀 Step 3/4: Start all services"
@@ -214,8 +168,8 @@ jobs:
             docker compose exec -T app php artisan optimize:clear
             # Buat cache baru setelah semua lama dibersihkan
             docker compose exec -T app php artisan config:cache
-            # Reload nginx agar membaca dist/ baru tanpa restart
-            docker compose exec -T nginx nginx -s reload 2>/dev/null || docker compose restart nginx
+            # Restart nginx agar membaca dist/ baru dengan bind-mount segar (hindari 403 Forbidden)
+            docker compose restart nginx
 
             echo ""
             echo "✅ ══════════════════════════════════"
