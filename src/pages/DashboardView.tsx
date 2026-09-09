@@ -7,7 +7,7 @@ import {
   FlaskConical, Zap, Activity, Filter, Plus, Save, MoreVertical, Edit, Trash2,
   Download, CheckCircle2, Eye, EyeOff, Trees, Layers, Sprout, MapPin, SearchIcon,
   Share2, Info, Brain, ChevronRight, Globe, Layers3, Cpu, Compass, Building2,
-  ArrowUpRight, ArrowDownRight, ShieldCheck, Sparkles, Gauge
+  ArrowUpRight, ArrowDownRight, ShieldCheck, Sparkles, Gauge, Clock
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -368,6 +368,37 @@ export default function DashboardView({ stats, nodes: propNodes, onNavigate }: {
   const resolvedFirmware = latestReading?.firmware_version || latestReading?.firmware || (activeNode as any)?.firmware_version || (activeNode as any)?.firmware || '1.0.0';
   const cleanFirmware = resolvedFirmware.toString().replace(/^fw\s*v?/i, '').replace(/^v/i, '');
 
+  const lastActiveTimestamp = useMemo(() => {
+    const targetCode = activeNode ? String(activeNode.device_code || activeNode.id) : null;
+    let raw = null;
+
+    if (targetCode && latestReading && String(latestReading.device_code || latestReading.device_id || latestReading.deviceId || '') === targetCode) {
+      raw = latestReading.timestamp || latestReading.reading_time || latestReading.created_at;
+    }
+
+    if (!raw && activeNode) {
+      raw = (activeNode as any).lastSeen || (activeNode as any).last_seen_at || (activeNode as any).latest_reading?.timestamp || (activeNode as any).latest_reading?.reading_time;
+    }
+
+    if (!raw && latestReading) {
+      raw = latestReading.timestamp || latestReading.reading_time || latestReading.created_at;
+    }
+
+    if (!raw) return null;
+    try {
+      const d = new Date(raw);
+      if (isNaN(d.getTime())) return null;
+      return d;
+    } catch {
+      return null;
+    }
+  }, [latestReading, activeNode]);
+
+  const lastActiveFormatted = useMemo(() => {
+    if (!lastActiveTimestamp) return null;
+    return `${format(lastActiveTimestamp, "d MMM yyyy, HH:mm", { locale: id })} WIB`;
+  }, [lastActiveTimestamp]);
+
   const getAgronomicAdvice = (data: any, customStation?: string, param?: string) => {
     const isEn = i18n.language === 'en';
     const temp = data?.current?.temp ?? 28.1;
@@ -542,10 +573,10 @@ export default function DashboardView({ stats, nodes: propNodes, onNavigate }: {
               <Cpu size={22} />
             </div>
             <div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-base font-black text-foreground tracking-tight">{formatEYDDeviceName(activeNode.name, activeNode.device_code || activeNode.id)}</h2>
                 {((activeNode.status as string) === 'online' || (activeNode.status as string) === 'aktif') ? (
-                  <div className="flex items-center gap-1.5">
+                  <div className="flex flex-wrap items-center gap-1.5">
                     <Badge variant="outline" className="text-[10px] px-2.5 py-0.5 font-extrabold uppercase rounded-lg border flex items-center gap-1.5 bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border-emerald-500/40">
                       <span className="w-2 h-2 rounded-full shrink-0 bg-emerald-500 animate-pulse" />
                       {t('Aktif')}
@@ -556,12 +587,26 @@ export default function DashboardView({ stats, nodes: propNodes, onNavigate }: {
                         {t('Alert Anomali')}
                       </Badge>
                     )}
+                    {lastActiveFormatted && (
+                      <span className="text-[11px] font-semibold text-muted-foreground flex items-center gap-1 ml-0.5">
+                        <Clock size={12} className="text-emerald-500" />
+                        {t('Update')}: {lastActiveFormatted}
+                      </span>
+                    )}
                   </div>
                 ) : (
-                  <Badge variant="outline" className="text-[10px] px-2.5 py-0.5 font-extrabold uppercase rounded-lg border flex items-center gap-1.5 bg-rose-500/20 text-rose-700 dark:text-rose-300 border-rose-500/40">
-                    <span className="w-2 h-2 rounded-full shrink-0 bg-rose-500" />
-                    {t('Tidak Aktif')}
-                  </Badge>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant="outline" className="text-[10px] px-2.5 py-0.5 font-extrabold uppercase rounded-lg border flex items-center gap-1.5 bg-rose-500/20 text-rose-700 dark:text-rose-300 border-rose-500/40">
+                      <span className="w-2 h-2 rounded-full shrink-0 bg-rose-500" />
+                      {t('Tidak Aktif')}
+                    </Badge>
+                    {lastActiveFormatted && (
+                      <span className="text-[11px] font-bold text-rose-600 dark:text-rose-400 bg-rose-500/10 dark:bg-rose-500/20 px-2.5 py-0.5 rounded-lg border border-rose-500/30 flex items-center gap-1.5 shadow-xs">
+                        <Clock size={12} className="text-rose-500 shrink-0" />
+                        <span>{t('Terakhir Aktif')}: {lastActiveFormatted}</span>
+                      </span>
+                    )}
+                  </div>
                 )}
               </div>
               <div className="flex flex-wrap items-center gap-3 text-xs font-semibold text-muted-foreground mt-1">

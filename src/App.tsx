@@ -328,6 +328,9 @@ export default function App() {
             if (payloadFw) {
               n.firmware_version = payloadFw;
             }
+            if (latestR) {
+              n.latest_reading = latestR;
+            }
             return normalizeNode(n);
           });
           setAllNodes(normalizedNodes);

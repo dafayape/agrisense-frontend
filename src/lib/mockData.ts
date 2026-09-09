@@ -16,6 +16,7 @@ export interface IoTNode {
   rssi: number;
   wind_speed: number;
   lastSeen: string;
+  last_seen_at?: string;
   firmware_version: string;
   gardenId?: number;
   lahanId?: number;
@@ -180,7 +181,8 @@ export const normalizeNode = (n: any): IoTNode => {
     battery_voltage: Number(volt),
     rssi: n.rssi ?? -72,
     wind_speed: n.wind_speed ?? n.windSpeed ?? 12.5,
-    lastSeen: n.last_seen_at || n.updated_at || new Date().toISOString(),
+    lastSeen: n.last_seen_at || n.lastSeen || n.latest_reading?.timestamp || n.latest_reading?.reading_time || n.updated_at || '',
+    last_seen_at: n.last_seen_at || n.lastSeen || n.latest_reading?.timestamp || n.latest_reading?.reading_time || n.updated_at || '',
     firmware_version: n.firmware_version || n.firmware || n.firmwareVersion || '1.0.0',
     lahanId: n.lahanId ? Number(n.lahanId) : (n.lahan_id ? Number(n.lahan_id) : undefined),
     gardenId: n.gardenId ? Number(n.gardenId) : (n.garden_id ? Number(n.garden_id) : undefined),
